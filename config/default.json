@@ -1,0 +1,5 @@
+{
+    "dbConnectionString": "mongodb://pruparel:Pranav123@ds115664.mlab.com:15664/restaurantdb",
+    "port": 9000,
+    "jwtPrivateKey": "PranavRestaurant"
+}
