@@ -17,13 +17,13 @@ router.get('/', async (request, response) => {
 
 //Gets the User matching with the required id 
 router.get('/username/:username', async (request, response) => {
-    const user = await User.findOne({ username: request.params.username});
+    const user = await User.findOne({ username: request.params.username });
     response.send(_.pick(user, ["id", "username", "email", "contact"]));
 });
 
 //Gets the User matching with the required id 
 router.get('/email/:email', async (request, response) => {
-    const user = await User.findOne({ email: request.params.email});
+    const user = await User.findOne({ email: request.params.email });
     response.send(_.pick(user, ["id", "username", "email", "contact"]));
 });
 
@@ -36,11 +36,11 @@ router.post('/', async (request, response) => {
         return response.status(400).send(error.details[0].message);
     }
 
-    if(await User.findOne({ username: request.body.username })) {
+    if (await User.findOne({ username: request.body.username })) {
         return response.status(400).send("Username is Invalid");
-    } else if(await User.findOne({ email: request.body.email }) ) {
+    } else if (await User.findOne({ email: request.body.email })) {
         return response.status(400).send("User already exists in the Database");
-    } else if(await User.findOne({contact: request.body.contact})) {
+    } else if (await User.findOne({ contact: request.body.contact })) {
         return response.status(400).send("User already exists in the Database");
     }
 
@@ -57,8 +57,8 @@ router.post('/', async (request, response) => {
 
     //Encrypt Password using Bcrypt
     const salt = await bcrypt.genSalt(10);
-    newUser.password =  await bcrypt.hash(newUser.password, salt);
-    
+    newUser.password = await bcrypt.hash(newUser.password, salt);
+
     await newUser.save();
 
     const token =
@@ -75,34 +75,47 @@ router.post('/', async (request, response) => {
 })
 
 //Change User Password
-router.put('/userPass/:id', async (request, response) => {
-    
+router.put('/userPassword/:id', async (request, response) => {
     const user = await User.findById(request.params.id);
     //Compare the Old and new Pasword
-    if(!await bcrypt.compare(request.body.password, user.password)) {
-        console.log(!await bcrypt.compare(request.body.password, user.password));
-        
+    if (!await bcrypt.compare(request.body.password, user.password)) {
         //Encrypt Password using Bcrypt
         const salt = await bcrypt.genSalt(10);
-        request.body.password =  await bcrypt.hash(request.body.password, salt);
+        request.body.password = await bcrypt.hash(request.body.password, salt);
 
-        //Updates the Database and sends the response to the server
-        const user_update = await User.findByIdAndUpdate({_id : request.params.id} , {            
-            $set: {
-                username: request.body.username,
-                email: request.body.email,
-                password: request.body.password,
-                contact: request.body.contact,
-                cart: request.body.cart,
-                userType: request.body.userType,
-                orders: request.body.orders
-            }
-        })        
-        response.status(200)
-        .send("Password successfully updated for user with username: " + user_update.username);
+        updateValues("password", request.body.password, user, response);
     } else {
         return response.status(400).send("You cannot enter last 3 Passwords");
     }
 });
 
+router.put('/userContact/:id', async (request, response) => {
+    const user = await User.findById(request.params.id);
+    updateValues("contact", request.body.contact, user, response);
+});
+
+updateValues = async (key, value, user, response) => {
+    let user_object = user;
+    console.log(user + '\n');
+    if (key == "password") {
+        user_object.password = value;
+        console.log(user + '\n');
+        user_update = await User.findOneAndUpdate({ _id: user_object.id }, {
+            $set: user_object
+        })
+        response.status(200).send("Password successfully updated for user");
+    } else if (key == "contact") {
+        user_object.contact = value
+        user_update = await User.findOneAndUpdate({ _id: user_object.id }, {
+            $set: user_object
+        })
+        response.status(200).send("Password successfully updated for user");
+    } else {
+        response.status(400).send("Something went Wrong - Cannot Update User Details");
+    }
+}
+
+getUser = () => {
+
+}
 module.exports = router;
