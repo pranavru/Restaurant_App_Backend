@@ -7,7 +7,7 @@ const userSchema = mongoose.Schema({
     password: { type: String, required: true, minLength: 5, maxLength: 1024 },
     contact: { type: Number, required: true, minLength: 5, maxLength: 1024 },
     userType: { type: String, required: true},
-    cart: { type: Object, required: false}
+    cart: { type: Array, required: false}
 })
 
 validateUser = (user) => {
@@ -17,7 +17,7 @@ validateUser = (user) => {
         password: Joi.string().min(5).max(1024).required(),
         contact: Joi.number().integer().required(),
         userType: Joi.string().required(),
-        cart: Joi.object()
+        cart: Joi.array()
     }
     return Joi.validate(user, schema);
 }

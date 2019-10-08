@@ -6,12 +6,12 @@ const cors = require('cors');
 
 const app = express();
 
-const userRouter = require('../MongoResDatabase/router/user.router.js');
-const authRouter = require('../MongoResDatabase/router/auth.router.js');
-const restaurantRouter = require('../MongoResDatabase/router/restuarant.router.js');
+const userRouter = require('./router/user.router');
+const authRouter = require('./router/auth.router.js');
+const restaurantRouter = require('./router/restuarant.router.js');
 const cuisineRouter = require('./router/cuisine.router.js');
-const cartRouter = require('../MongoResDatabase/router/cart.router.js');
-const orderRouter = require('../MongoResDatabase/router/order.router.js');
+const cartRouter = require('./router/cart.router.js');
+const orderRouter = require('./router/order.router.js');
 
 
 var mongoConnection = mongoose.connection;

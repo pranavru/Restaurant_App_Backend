@@ -9,9 +9,10 @@ const { User, validate } = require('../models/user.model.js');
 
 router.use(express.json());
 
-router.get('/', (request, response) => {
-    response.send("USER DATABASE REST API");
-})
+router.get('/', async (request, response) => {
+    const user = await User.find();
+    response.send(user);
+});
 
 router.post('/', async (request, response) => {
 
@@ -21,13 +22,21 @@ router.post('/', async (request, response) => {
         return response.status(400).send(error.details[0].message);
     }
 
+    if(await User.findOne({ username: request.body.username })) {
+        return response.status(400).send("Username is Invalid");
+    } else if(await User.findOne({ email: request.body.email }) ) {
+        return response.status(400).send("User already exists in the Database");
+    } else if(await User.findOne({contact: request.body.contact})) {
+        return response.status(400).send("User already exists in the Database");
+    }
+
     let newUser = new User({
         username: request.body.username,
         email: request.body.email,
         password: request.body.password,
         contact: request.body.contact,
         cart: request.body.cart,
-        userType: request.body.userType
+        userType: request.body.userType,
     })
 
 
