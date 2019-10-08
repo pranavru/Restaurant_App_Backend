@@ -103,29 +103,4 @@ router.put('/userPass/:id', async (request, response) => {
     }
 });
 
-router.put('/userCart/:id', async (request, response) => {
-    
-    const user = await User.findById(request.params.id);
-    const r = request.body;
-    if(user.username == r.username && user.email == r.email && user.contact == r.contact && user.userType == r.userType ) {
-        if(r.password == user.password) {
-            const user_update = await User.findByIdAndUpdate({_id : request.params.id} , {
-            
-                $set: {
-                    username: request.body.username,
-                    email: request.body.email,
-                    password: request.body.password,
-                    contact: request.body.contact,
-                    cart: request.body.cart,
-                    userType: request.body.userType,
-                }
-            })        
-            response.status(200)
-            .send(_.pick(user_update, ["id", "username", "cart"]));
-        }
-    } else {
-      response.send(400).send("Error - Cannot update cart");  
-    }
-});
-
 module.exports = router;
