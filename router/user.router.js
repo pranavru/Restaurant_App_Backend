@@ -16,13 +16,13 @@ router.get('/', async (request, response) => {
 });
 
 //Gets the User matching with the required id 
-router.get('/:username', async (request, response) => {
+router.get('/username/:username', async (request, response) => {
     const user = await User.findOne({ username: request.params.username});
     response.send(_.pick(user, ["id", "username", "email", "contact"]));
 });
 
 //Gets the User matching with the required id 
-router.get('/:email', async (request, response) => {
+router.get('/email/:email', async (request, response) => {
     const user = await User.findOne({ email: request.params.email});
     response.send(_.pick(user, ["id", "username", "email", "contact"]));
 });
@@ -51,6 +51,7 @@ router.post('/', async (request, response) => {
         contact: request.body.contact,
         cart: request.body.cart,
         userType: request.body.userType,
+        orders: request.body.orders
     })
 
 
@@ -94,6 +95,7 @@ router.put('/userPass/:id', async (request, response) => {
                 contact: request.body.contact,
                 cart: request.body.cart,
                 userType: request.body.userType,
+                orders: request.body.orders
             }
         })        
         response.status(200)
