@@ -14,6 +14,11 @@ router.get('/', async (request, response) => {
     response.send(user);
 });
 
+router.get('/:username', async (request, response) => {
+    const user = await User.findOne({ username: request.params.username});
+    response.send(_.pick(user, ["username", "email", "contact"]));
+});
+
 router.post('/', async (request, response) => {
 
     //Check the Error
