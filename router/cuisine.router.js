@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
-const bcrypt = require('bcrypt');
 
 const { Cuisine, validate } = require("../models/cuisine.model.js");
 const auth = require('../middleware/auth.middleware.js');

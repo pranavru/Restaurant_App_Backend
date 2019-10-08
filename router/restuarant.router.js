@@ -29,7 +29,8 @@ router.put('/:id', async (req, res) => {
             name: req.body.name,
             contact: req.body.contact,
             address: req.body.address,
-            type: req.body.type
+            type: req.body.type,
+            cuisines: req.body.cuisines
         }})
     res.send(restaurantResult);
 })
@@ -48,12 +49,13 @@ router.post('/', async (req, res) => {
             name: req.body.name,
             contact: req.body.contact,
             address: req.body.address,
-            type: req.body.type
+            type: req.body.type,
+            cuisines: req.body.cuisines
         }
     )
 
     await newRestaurant.save();
-    res.status(200).send(_.pick(newRestaurant, ['id', 'name', 'contact', 'address', 'type']))
+    res.status(200).send(_.pick(newRestaurant, ['id', 'name', 'contact', 'address', 'type', "cuisines"]))
 })
 
 module.exports = router;

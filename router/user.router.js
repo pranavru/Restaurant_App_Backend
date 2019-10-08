@@ -25,7 +25,9 @@ router.post('/', async (request, response) => {
         username: request.body.username,
         email: request.body.email,
         password: request.body.password,
-        contact: request.body.contact
+        contact: request.body.contact,
+        cart: request.body.cart,
+        userType: request.body.userType
     })
 
 
@@ -44,7 +46,7 @@ router.post('/', async (request, response) => {
 
     response
         .header('x-auth-token', token)
-        .status(200).send(_.pick(newUser, ['id', 'username', 'email']));
+        .status(200).send(_.pick(newUser, ['id', 'username']));
 })
 
 module.exports = router;
